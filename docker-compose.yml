@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  msa.comm.lab.services.catalog:
+    image: ${DOCKER_REGISTRY-}msacommlabservicescatalog
+    build:
+      context: .
+      dockerfile: Msa.Comm.Lab.Services.Catalog/Dockerfile
+
+  msa.comm.lab.services.order:
+    image: ${DOCKER_REGISTRY-}msacommlabservicesorder
+    build:
+      context: .
+      dockerfile: Msa.Comm.Lab.Services.Order/Dockerfile
+    depends_on:
+      - msa.comm.lab.services.catalog
