@@ -33,6 +33,10 @@ namespace Msa.Comm.Lab.Services.Catalog
 
         public void ConfigureServices(IServiceCollection services)
         {
+            // Registers and starts Jaeger (see Shared.JaegerServiceCollectionExtensions)
+            // Also registers OpenTracing
+            services.AddJaeger(currentEnvironment);
+
             // The simple "built in" EF Core in memory provider outputs less trace info compared to Sqlite, so
             // use Sqlite configured for in-mem instead
             // services.AddnInMem();
@@ -72,8 +76,6 @@ namespace Msa.Comm.Lab.Services.Catalog
             {
                 endpoints.MapControllers();
             });
-
-
         }
     }
 }

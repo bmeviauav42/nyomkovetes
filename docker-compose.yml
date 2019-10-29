@@ -6,11 +6,25 @@ services:
     build:
       context: .
       dockerfile: Msa.Comm.Lab.Services.Catalog/Dockerfile
-
+    environment:
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_PORT=6831
+      - JAEGER_SAMPLER_TYPE=const
+    depends_on:
+      - jaeger
   msa.comm.lab.services.order:
     image: ${DOCKER_REGISTRY-}msacommlabservicesorder
     build:
       context: .
       dockerfile: Msa.Comm.Lab.Services.Order/Dockerfile
+    environment:
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_PORT=6831
+      - JAEGER_SAMPLER_TYPE=const
     depends_on:
       - msa.comm.lab.services.catalog
+      - jaeger
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"  # For Jaeger web UI

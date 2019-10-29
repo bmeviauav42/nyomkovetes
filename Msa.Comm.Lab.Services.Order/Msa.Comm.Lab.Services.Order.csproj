@@ -12,4 +12,8 @@
     <PackageReference Include="Refit.HttpClientFactory" Version="4.7.51" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Msa.Comm.Lab.Shared\Msa.Comm.Lab.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

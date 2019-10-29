@@ -32,6 +32,10 @@ namespace Msa.Comm.Lab.Services.Order
 
         public void ConfigureServices(IServiceCollection services)
         {
+            // Registers and starts Jaeger (see Shared.JaegerServiceCollectionExtensions)
+            // Also registers OpenTracing
+            services.AddJaeger(currentEnvironment);
+
             //services.AddMvc
             services.AddControllers();
 
