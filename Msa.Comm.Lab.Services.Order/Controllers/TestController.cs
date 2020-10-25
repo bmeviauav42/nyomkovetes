@@ -18,7 +18,8 @@ namespace Msa.Comm.Lab.Services.Order.Controllers
         // ##Instr_Baggage
         ITracer tracer;
 
-        public TestController(ICatalogApiClient catalogApiClient, ILogger<TestController> log,
+        public TestController(ICatalogApiClient catalogApiClient,
+            ILogger<TestController> log, // ##Instr_Log
             ITracer tracer)  // ##Instr_Baggage         
         {
             this.catalogApiClient = catalogApiClient;
@@ -36,6 +37,7 @@ namespace Msa.Comm.Lab.Services.Order.Controllers
             // Simulates request id
             int requestId = 222;
 
+            // ##Instr_Baggage
             // Get active span and add data to baggage
             IScope scope = tracer.ScopeManager.Active;
             if (scope != null)
