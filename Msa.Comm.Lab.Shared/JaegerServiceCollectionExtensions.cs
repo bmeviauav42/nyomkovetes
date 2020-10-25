@@ -11,6 +11,8 @@ using Microsoft.Extensions.Hosting;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    // Mostly based on earlier versions of https://github.com/opentracing-contrib/csharp-netcore/tree/master/samples/netcoreapp3.1
+    // The main difference is that we use an agent instead of sending the data to the Jaeger collector explicitely.
     public static class JaegerServiceCollectionExtensions
     {
         // Registers and starts Jaeger.
@@ -56,6 +58,16 @@ namespace Microsoft.Extensions.DependencyInjection
 
                 // We could also create a new factory and configure it for our needs
                 ILoggerFactory loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
+
+                // Without this somehow Jeager does not use any sender despite the JAEGER_AGENT_... environmental settings
+                // when Debugging under Visual Studio (you can see this in the docker log of the Catalog and Order service
+                // "No suitable sender found. Using NoopSender, meaning that data will not be sent anywhere!".
+                // The problem did not exist with older Jaeger ("0.3.6") dependency,
+                // or when docker-compose is used to start the services. Anyways, setting the DefaultSenderResolver explicitely
+                // solves the problem. This is not needed when not using an agent (when you send data to the collector
+                // explicitely), or you might need to adjust it.
+                Jaeger.Configuration.SenderConfiguration.DefaultSenderResolver = 
+                    new Jaeger.Senders.SenderResolver(loggerFactory).RegisterSenderFactory<Jaeger.Senders.Thrift.ThriftSenderFactory>();
 
                 // Get Jaeger config from environment
                 var config = Jaeger.Configuration.FromEnv(loggerFactory);
