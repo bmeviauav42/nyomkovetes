@@ -60,7 +60,9 @@ namespace Microsoft.Extensions.DependencyInjection
                 ILoggerFactory loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
 
                 // Without this somehow Jeager does not use any sender despite the JAEGER_AGENT_... environmental settings
-                // when Debugging under Visual Studio. The problem did not exist with older Jaeger ("0.3.6") dependency,
+                // when Debugging under Visual Studio (you can see this in the docker log of the Catalog and Order service
+                // "No suitable sender found. Using NoopSender, meaning that data will not be sent anywhere!".
+                // The problem did not exist with older Jaeger ("0.3.6") dependency,
                 // or when docker-compose is used to start the services. Anyways, setting the DefaultSenderResolver explicitely
                 // solves the problem. This is not needed when not using an agent (when you send data to the collector
                 // explicitely), or you might need to adjust it.
